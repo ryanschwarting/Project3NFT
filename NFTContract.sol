@@ -31,7 +31,7 @@ contract NFTContract is ERC1155, Ownable {
                 string memory _initBaseURI)
         ERC1155(_name, _symbol) {
             setBaseURI(_initBaseURI);
-            _mint(msg.sender, 20);
+            _mint(msg.sender, 10);
         }
   
     function mint(address account, uint256 id, uint256 amount) public payable {
