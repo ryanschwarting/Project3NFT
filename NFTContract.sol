@@ -46,7 +46,7 @@ contract NFTContract is ERC1155, Ownable {
      function withdraw (uint amount, address payable recipient) public {
 
         require(recipient == accountOne || recipient == accountTwo 
-        || recipient == accountOne || recipient == accountFour, "You dont own this account");
+        || recipient == accountThree || recipient == accountFour, "You dont own this account");
 
         require(amount <= contractBalance, "Insufficient Funds"); 
 
