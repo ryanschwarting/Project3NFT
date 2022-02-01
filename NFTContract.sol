@@ -8,7 +8,7 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contr
 
 
 
-contract NFTContract is ERC1155, Ownable {
+contract Kaktos is ERC1155, Ownable {
     using SafeMath for uint256;
 
     address payable accountOne;
@@ -16,26 +16,36 @@ contract NFTContract is ERC1155, Ownable {
     address payable accountThree;
     address payable accountFour;
     address public lastToWithdraw;
-    uint public lastWithdrawAmount;
-    uint public contractBalance;
-
+    uint256 public lastWithdrawAmount;
+    uint256 public contractBalance;
     string public baseURI;
     uint256 public totalSupply = 1000;
     uint256 public mintPrice = 10 ether;
     uint256 public maxMintAmount = 10;
+    bool public paused = false;
+
     //owner?
     //gas limit?
 
-    constructor(string memory _name, 
-                string memory _symbol, 
-                string memory _initBaseURI)
-        ERC1155(_name, _symbol) {
+    constructor(
+        string memory _name, 
+        //string memory _symbol, 
+        string memory _initBaseURI)
+        ERC1155(_name) {
             setBaseURI(_initBaseURI);
-            _mint(msg.sender, 10);
+            mint(msg.sender, 10);
         }
   
-    function mint(address account, uint256 id, uint256 amount) public payable {
-        _mint(account, id, amount, "");
+    function mint(address account, uint256 _mintAmount) public payable {
+        uint256 supply = totalSupply;
+        require(!paused);
+        require(_mintAmount > 0);
+        require(_mintAmount <= maxMintAmount);
+        require(supply + _mintAmount <= totalSupply);
+
+          for (uint256 i = 1; i <= _mintAmount; i++) { // should this only be one +? it is minting double the amount
+            _mint(account, supply + i);
+        }
     }
 
     function burn(address account, uint256 id, uint256 amount) public {
@@ -70,5 +80,9 @@ contract NFTContract is ERC1155, Ownable {
         accountFour = account4;
     }
 
-    fallback() external payable {}
+    //fallback() external payable {}
+
+    function setBaseURI(string memory _newBaseURI) public onlyOwner {
+        baseURI = _newBaseURI;
+    }
 }
