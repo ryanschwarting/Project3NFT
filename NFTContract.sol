@@ -13,8 +13,6 @@ contract Kaktos is ERC1155, Ownable {
 
     address payable accountOne;
     address payable accountTwo;
-    address payable accountThree;
-    address payable accountFour;
     address public lastToWithdraw;
     uint256 public lastWithdrawAmount;
     uint256 public contractBalance;
@@ -41,10 +39,10 @@ contract Kaktos is ERC1155, Ownable {
         require(!paused);
         require(_mintAmount > 0);
         require(_mintAmount <= maxMintAmount);
-        require(supply + _mintAmount <= totalSupply);
+        require(supply.add(_mintAmount) <= totalSupply);
 
-          for (uint256 i = 1; i <= _mintAmount; i++) { // should this only be one +? it is minting double the amount
-            _mint(account, supply + i);
+          for (uint256 i = 1; i <= _mintAmount; i++) { 
+            (account, supply + i);
         }
     }
 
@@ -55,8 +53,7 @@ contract Kaktos is ERC1155, Ownable {
     
      function withdraw (uint amount, address payable recipient) public {
 
-        require(recipient == accountOne || recipient == accountTwo 
-        || recipient == accountThree || recipient == accountFour, "You dont own this account");
+        require(recipient == accountOne || recipient == accountTwo , "You dont own this account");
 
         require(amount <= contractBalance, "Insufficient Funds"); 
 
@@ -71,16 +68,13 @@ contract Kaktos is ERC1155, Ownable {
         contractBalance = address(this).balance; 
     }
 
-    function setAccounts (address payable account1, address payable account2, 
-    address payable account3, address payable account4) public {
+    function setAccounts (address payable account1, address payable account2) public {
 
         accountOne = account1;
         accountTwo = account2;
-        accountThree = account3;
-        accountFour = account4;
     }
 
-    //fallback() external payable {}
+    receive() external payable {}
 
     function setBaseURI(string memory _newBaseURI) public onlyOwner {
         baseURI = _newBaseURI;
