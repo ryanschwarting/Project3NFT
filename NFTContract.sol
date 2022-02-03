@@ -12,7 +12,7 @@ contract Kaktos is ERC721Enumerable, Ownable {
   string public notRevealedUri;
   uint256 public cost = 10 ether;
   uint256 public maxSupply = 1000;
-  uint256 public maxMintAmount = 10;
+  uint256 public maxMintAmount = 10000000000000000000 wei;
   uint256 public nftPerAddressLimit = 5;
   bool public paused = false;
   bool public revealed = false;
